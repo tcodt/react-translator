@@ -6,12 +6,12 @@ export default function CustomSelect1({ setSelectTargetLang, text }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const options = [
-    { label: "English | انگلیسی", value: "en" },
-    { label: "German | آلمانی", value: "de" },
-    { label: "French | فرانسوی", value: "fr" },
-    { label: "Persian | فارسی", value: "fa" },
-    { label: "Arabic | عربی", value: "ar-sa" },
-    { label: "Chinese | چینی", value: "zh-hk" },
+    { label: "English 🇺🇲 انگلیسی", value: "en" },
+    { label: "German 🇩🇪 آلمانی", value: "de" },
+    { label: "French 🇲🇫 فرانسوی", value: "fr" },
+    { label: "Persian 🇮🇷 فارسی", value: "fa" },
+    { label: "Arabic 🇸🇦 عربی", value: "ar-sa" },
+    { label: "Chinese 🇨🇳 چینی", value: "zh-hk" },
   ];
 
   const handleOptionClick = (option) => {
