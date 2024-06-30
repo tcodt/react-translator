@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import CustomSelect1 from "./components/CustomSelect1";
 import CustomSelect2 from "./components/CustomSelect2";
+import Navbar from "./components/Navbar";
+import { toast, Toaster } from "react-hot-toast";
 
 function App() {
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState("");
-  const [selectedLang, setSelectedLang] = useState("en");
+  const [selectedLang, setSelectedLang] = useState("fa");
   const [selectTargetLang, setSelectTargetLang] = useState("en");
   const [isCopied, setIsCopied] = useState(false);
+  const [textDirection, setTextDirection] = useState(false);
+
+  useEffect(() => {
+    if (selectedLang === "fa" || selectedLang === "ar-sa")
+      setTextDirection(true);
+    else setTextDirection(false);
+  }, [selectedLang]);
 
   const translateText = () => {
     if (inputText.trim() === "") {
-      alert("Input is empty !");
+      toast.error("لطفا فیلد را پر کنید");
       return;
     }
 
@@ -47,18 +56,31 @@ function App() {
 
   return (
     <>
-      <div className="flex items-center justify-center md:h-screen p-4">
-        <div className="p-4 bg-slate-100 rounded shadow w-[90%]">
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        toastOptions={{
+          duration: 5000,
+        }}
+      />
+      <div className="flex items-center justify-center md:h-screen md:bg-white bg-slate-100 p-4">
+        <div className="md:p-4 md:bg-slate-100 md:rounded md:shadow md:w-[90%] w-full">
           <div className="grid grid-cols-12 gap-4 items-center">
+            <div className="md:hidden col-span-full">
+              <Navbar />
+            </div>
             <div className="col-span-full md:col-span-5 flex flex-col gap-4">
               <CustomSelect1
                 setSelectedLang={setSelectedLang}
                 text="انتخاب زبان"
               />
               <textarea
-                className="border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 text-start font-semibold w-full"
+                className={`border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 ${
+                  textDirection ? "text-start" : "text-end"
+                } font-semibold w-full`}
                 id="input_text"
-                placeholder="Input..."
+                placeholder="ورودی..."
                 rows="10"
                 spellCheck="false"
                 value={inputText}
@@ -146,7 +168,7 @@ function App() {
               <textarea
                 className="border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 text-start font-semibold w-full"
                 id="output_text"
-                placeholder="Output..."
+                placeholder="خروجی..."
                 rows="10"
                 value={outputText}
                 readOnly
