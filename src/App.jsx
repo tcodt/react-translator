@@ -1,10 +1,160 @@
+import { useState } from "react";
 import "./App.css";
+import CustomSelect1 from "./components/CustomSelect1";
+import CustomSelect2 from "./components/CustomSelect2";
 
 function App() {
+  const [inputText, setInputText] = useState("");
+  const [outputText, setOutputText] = useState("");
+  const [selectedLang, setSelectedLang] = useState("en");
+  const [selectTargetLang, setSelectTargetLang] = useState("en");
+  const [isCopied, setIsCopied] = useState(false);
+
+  const translateText = () => {
+    if (inputText.trim() === "") {
+      alert("Input is empty !");
+      return;
+    }
+
+    googleTranslateApi(inputText, selectedLang, selectTargetLang).then((res) =>
+      setOutputText(res.text)
+    );
+  };
+
+  const clearFeild = () => {
+    setInputText("");
+    setOutputText("");
+    setIsCopied(false);
+  };
+
+  const handleCopy = () => {
+    setIsCopied(true);
+    navigator.clipboard.writeText(outputText);
+  };
+
+  // Google Translate API
+  const googleTranslateApi = (text, sourceLang, targetLang) => {
+    return fetch(
+      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(
+        text
+      )}`
+    )
+      .then((response) => response.json())
+      .then((data) => ({
+        text: data[0][0][0],
+      }));
+  };
+
   return (
     <>
-      <div>
-        <h1 className="text-blue-500">Hello World</h1>
+      <div className="flex items-center justify-center md:h-screen p-4">
+        <div className="p-4 bg-slate-100 rounded shadow w-[90%]">
+          <div className="grid grid-cols-12 gap-4 items-center">
+            <div className="col-span-full md:col-span-5 flex flex-col gap-4">
+              <CustomSelect1
+                setSelectedLang={setSelectedLang}
+                text="انتخاب زبان"
+              />
+              <textarea
+                className="border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 text-start font-semibold w-full"
+                id="input_text"
+                placeholder="Input..."
+                rows="10"
+                spellCheck="false"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                required
+              ></textarea>
+            </div>
+            <div className="col-span-full md:col-span-2">
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={translateText}
+                  className="bg-sky-500 hover:bg-sky-600 transition rounded p-2 text-white font-semibold w-full flex items-center justify-center gap-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    className="bi bi-translate"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286zm1.634-.736L5.5 3.956h-.049l-.679 2.022z" />
+                    <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm7.138 9.995q.289.451.63.846c-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6 6 0 0 1-.415-.492 2 2 0 0 1-.94.31" />
+                  </svg>{" "}
+                  ترجمه
+                </button>
+
+                <button
+                  onClick={clearFeild}
+                  className="text-gray-500 hover:text-red-500 transition flex justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    fill="currentColor"
+                    className="bi bi-trash"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="col-span-full md:col-span-5 flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <CustomSelect2
+                  setSelectTargetLang={setSelectTargetLang}
+                  text="به چه زبانی ترجمه شود"
+                />
+                <button onClick={handleCopy} className="text-gray-500">
+                  {isCopied ? (
+                    <span className="text-green-500">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        fill="currentColor"
+                        className="bi bi-clipboard2-check"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z" />
+                        <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z" />
+                        <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z" />
+                      </svg>
+                    </span>
+                  ) : (
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        fill="currentColor"
+                        className="bi bi-clipboard2"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M3.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5H12a.5.5 0 0 1 0-1h.5A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1H4a.5.5 0 0 1 0 1z" />
+                        <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5" />
+                      </svg>
+                    </span>
+                  )}
+                </button>
+              </div>
+              <textarea
+                className="border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 text-start font-semibold w-full"
+                id="output_text"
+                placeholder="Output..."
+                rows="10"
+                value={outputText}
+                readOnly
+                spellCheck="false"
+              ></textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
