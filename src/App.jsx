@@ -12,6 +12,7 @@ function App() {
   const [selectTargetLang, setSelectTargetLang] = useState("en");
   const [isCopied, setIsCopied] = useState(false);
   const [textDirection, setTextDirection] = useState(false);
+  const [outputDir, setOutputDir] = useState(false);
 
   useEffect(() => {
     if (selectedLang === "fa" || selectedLang === "ar-sa")
@@ -19,7 +20,13 @@ function App() {
     else setTextDirection(false);
   }, [selectedLang]);
 
-  const translateText = () => {
+  useEffect(() => {
+    if (selectTargetLang === "fa" || selectTargetLang === "ar-sa")
+      setOutputDir(true);
+    else setOutputDir(false);
+  }, [selectTargetLang]);
+
+  /*   const translateText = () => {
     if (inputText.trim() === "") {
       toast.error("لطفا فیلد را پر کنید");
       return;
@@ -28,7 +35,7 @@ function App() {
     googleTranslateApi(inputText, selectedLang, selectTargetLang).then((res) =>
       setOutputText(res.text)
     );
-  };
+  }; */
 
   const clearFeild = () => {
     setInputText("");
@@ -39,6 +46,13 @@ function App() {
   const handleCopy = () => {
     setIsCopied(true);
     navigator.clipboard.writeText(outputText);
+  };
+
+  const inputChangeHandler = (e) => {
+    setInputText(e.target.value);
+    googleTranslateApi(e.target.value, selectedLang, selectTargetLang).then(
+      (res) => setOutputText(res.text)
+    );
   };
 
   // Google Translate API
@@ -71,26 +85,28 @@ function App() {
               <Navbar />
             </div>
             <div className="col-span-full md:col-span-5 flex flex-col gap-4">
-              <CustomSelect1
-                setSelectedLang={setSelectedLang}
-                text="انتخاب زبان"
-              />
+              <div className="flex items-center gap-2">
+                <CustomSelect1
+                  setSelectedLang={setSelectedLang}
+                  text="انتخاب زبان"
+                />
+              </div>
               <textarea
                 className={`border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 ${
-                  textDirection ? "text-start" : "text-end"
+                  textDirection ? "text-start" : "ltr-dir"
                 } font-semibold w-full`}
                 id="input_text"
-                placeholder="ورودی..."
+                placeholder={textDirection ? "ورودی..." : "Input..."}
                 rows="10"
                 spellCheck="false"
                 value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
+                onInput={inputChangeHandler}
                 required
               ></textarea>
             </div>
             <div className="col-span-full md:col-span-2">
-              <div className="flex flex-col gap-4">
-                <button
+              <div className="flex items-center justify-center gap-12">
+                {/* <button
                   onClick={translateText}
                   className="bg-sky-500 hover:bg-sky-600 transition rounded p-2 text-white font-semibold w-full flex items-center justify-center gap-2"
                 >
@@ -106,7 +122,7 @@ function App() {
                     <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm7.138 9.995q.289.451.63.846c-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6 6 0 0 1-.415-.492 2 2 0 0 1-.94.31" />
                   </svg>{" "}
                   ترجمه
-                </button>
+                </button> */}
 
                 <button
                   onClick={clearFeild}
@@ -124,15 +140,11 @@ function App() {
                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                   </svg>
                 </button>
-              </div>
-            </div>
-            <div className="col-span-full md:col-span-5 flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <CustomSelect2
-                  setSelectTargetLang={setSelectTargetLang}
-                  text="به چه زبانی ترجمه شود"
-                />
-                <button onClick={handleCopy} className="text-gray-500">
+
+                <button
+                  onClick={handleCopy}
+                  className="text-gray-500 hover:green-500 transition"
+                >
                   {isCopied ? (
                     <span className="text-green-500">
                       <svg
@@ -165,10 +177,20 @@ function App() {
                   )}
                 </button>
               </div>
+            </div>
+            <div className="col-span-full md:col-span-5 flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <CustomSelect2
+                  setSelectTargetLang={setSelectTargetLang}
+                  text="به چه زبانی ترجمه شود"
+                />
+              </div>
               <textarea
-                className="border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 text-start font-semibold w-full"
+                className={`border-2 resize-none border-slate-200 focus:border-slate-300 p-2 rounded outline-none text-gray-600 font-semibold w-full ${
+                  outputDir ? "text-start" : "ltr-dir"
+                }`}
                 id="output_text"
-                placeholder="خروجی..."
+                placeholder={outputDir ? "خروجی..." : "Output..."}
                 rows="10"
                 value={outputText}
                 readOnly

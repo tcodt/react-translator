@@ -8,44 +8,7 @@ body {
   background-image: url("/image//polygon-scatter-haikei.png");
 }
 
-/* Select Tag */
-select {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 2px solid #e2e8f0; /* Add the border here */
-  border-radius: 4px;
-  background-color: #f2f2f2;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
-/* Hover effect for select */
-select:hover {
-  border-color: #0ea5e9; /* Change the border color on hover */
-}
-
-/* Focus effect for select */
-select:focus {
-  outline: none; /* Remove the default focus outline */
-  border-color: #0ea5e9; /* Change the border color on focus */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle box-shadow */
-}
-
-/* Option Tag */
-select option {
-  background-color: #fff;
-  color: #333;
-  padding: 5px;
-}
-
-/* Hover effect for options */
-select option:hover {
-  background-color: #f2f2f2 !important;
-}
-
-/* Selected option */
-select option:checked {
-  background-color: #0ea5e9;
-  color: #fff;
+.ltr-dir {
+  direction: ltr !important;
+  text-align: left !important;
 }
