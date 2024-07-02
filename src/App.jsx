@@ -46,13 +46,21 @@ function App() {
   const handleCopy = () => {
     setIsCopied(true);
     navigator.clipboard.writeText(outputText);
+    toast.success("متن با موفقیت کپی شد");
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
   };
 
   const inputChangeHandler = (e) => {
-    setInputText(e.target.value);
-    googleTranslateApi(e.target.value, selectedLang, selectTargetLang).then(
-      (res) => setOutputText(res.text)
-    );
+    if (e.target.value === "") {
+      clearFeild();
+    } else {
+      setInputText(e.target.value);
+      googleTranslateApi(e.target.value, selectedLang, selectTargetLang).then(
+        (res) => setOutputText(res.text)
+      );
+    }
   };
 
   // Google Translate API
@@ -100,12 +108,12 @@ function App() {
                 rows="10"
                 spellCheck="false"
                 value={inputText}
-                onInput={inputChangeHandler}
+                onChange={inputChangeHandler}
                 required
               ></textarea>
             </div>
             <div className="col-span-full md:col-span-2">
-              <div className="flex items-center justify-center gap-12">
+              <div className="flex items-center justify-around">
                 {/* <button
                   onClick={translateText}
                   className="bg-sky-500 hover:bg-sky-600 transition rounded p-2 text-white font-semibold w-full flex items-center justify-center gap-2"
@@ -126,7 +134,7 @@ function App() {
 
                 <button
                   onClick={clearFeild}
-                  className="text-gray-500 hover:text-red-500 transition flex justify-center"
+                  className="text-gray-500 hover:text-red-500 transition flex items-center justify-center gap-2"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -139,11 +147,12 @@ function App() {
                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                   </svg>
+                  پاک کردن
                 </button>
 
                 <button
                   onClick={handleCopy}
-                  className="text-gray-500 hover:green-500 transition"
+                  className="text-gray-500 hover:green-500 transition flex items-center gap-2"
                 >
                   {isCopied ? (
                     <span className="text-green-500">
@@ -175,6 +184,7 @@ function App() {
                       </svg>
                     </span>
                   )}
+                  کپی
                 </button>
               </div>
             </div>
