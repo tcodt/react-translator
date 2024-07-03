@@ -113,7 +113,7 @@ function App() {
               ></textarea>
             </div>
             <div className="col-span-full md:col-span-2">
-              <div className="flex items-center justify-around">
+              <div className="flex md:flex-col md:gap-8 items-center justify-around">
                 {/* <button
                   onClick={translateText}
                   className="bg-sky-500 hover:bg-sky-600 transition rounded p-2 text-white font-semibold w-full flex items-center justify-center gap-2"
