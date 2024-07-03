@@ -1,8 +1,16 @@
-# React + Vite
+# React Translator App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app created byt React and using an API.
+Click [here](https://tcod-react-translator.netlify.app) to watch the demo 👀
 
-Currently, two official plugins are available:
+## Perfect UI and UX
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Users will enjoy using this app cause it has a good UI and UX
+
+Created by:
+- HTML
+- CSS
+- JavaScript
+    - React
+        - Functional Component
+- API
